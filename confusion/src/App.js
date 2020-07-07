@@ -5,12 +5,16 @@ import { Navbar, NavbarBrand } from "reactstrap";
 import { DISHES } from "./shared/dishes";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dishes: DISHES,
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     dishes: DISHES,
+  //   };
+  // }
+
+  state = {
+    dishes: DISHES,
+  };
 
   render() {
     return (
