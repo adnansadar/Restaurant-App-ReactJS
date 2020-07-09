@@ -29,8 +29,10 @@ class Header extends Component {
   render() {
     return (
       <div>
+        {/* from md to lg no collapse will occur */}
         <Navbar dark expand="md">
           <div className="container">
+            {/* Toggler on the left and Brand on the right depending on what is declared first */}
             <NavbarToggler onClick={this.toggleNav} />
             <NavbarBrand className="mr-auto" href="/">
               <img
@@ -41,7 +43,9 @@ class Header extends Component {
               />
             </NavbarBrand>
             <Collapse isOpen={this.state.isNavOpen} navbar>
+              {/* isOpen is a function? */}
               <Nav navbar>
+                {/* navabar? */}
                 <NavItem>
                   <NavLink className="nav-link" to="/home">
                     <span className="fa fa-home fa-lg"></span> Home

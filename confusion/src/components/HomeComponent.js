@@ -17,6 +17,7 @@ function RenderCard({ item }) {
         {item.designation ? (
           <CardSubtitle>{item.designation}</CardSubtitle>
         ) : null}
+        {/* if designation exists then show it else return null */}
         <CardText>{item.description}</CardText>
       </CardBody>
     </Card>
