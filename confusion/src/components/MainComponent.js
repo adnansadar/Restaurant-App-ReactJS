@@ -11,6 +11,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { COMMENTS } from "../shared/comments";
 import { PROMOTIONS } from "../shared/promotions";
 import { LEADERS } from "../shared/leaders";
+import About from "./AboutComponent";
 
 class Main extends Component {
   constructor(props) {
@@ -27,10 +28,12 @@ class Main extends Component {
     const DishWithId = ({ match }) => {
       return (
         <DishDetail
+          //
           dish={
             this.state.dishes.filter(
               (dish) => dish.id === parseInt(match.params.dishId, 10)
             )[0]
+            // Integer to the base 10, params = Route parameters are parts of the URL that will change based on the object we want to display
           }
           comments={this.state.comments.filter(
             (comment) => comment.dishId === parseInt(match.params.dishId, 10)
@@ -65,7 +68,14 @@ class Main extends Component {
             path="/menu"
             component={() => <Menu dishes={this.state.dishes} />}
           />
+          <Route
+            exact
+            path="/aboutus"
+            component={() => <About leaders={this.state.leaders} />}
+            // Passing leaders to About component
+          />
           <Route path="/menu/:dishId" component={DishWithId} />
+          {/* Routes the menu to the exact dish using dishid and loads it seperately */}
           <Route exact path="/contactus" component={Contact} />
           {/* Redirect= Default if wrong URL entered */}
           <Redirect to="/home" />

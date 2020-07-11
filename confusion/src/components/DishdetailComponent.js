@@ -66,6 +66,7 @@ const DishDetail = (props) => {
         <Breadcrumb>
           <BreadcrumbItem>
             <Link to="/menu">Menu</Link>
+            {/* goes to http://localhost:3000/menu/ in the URL */}
           </BreadcrumbItem>
           <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
         </Breadcrumb>
