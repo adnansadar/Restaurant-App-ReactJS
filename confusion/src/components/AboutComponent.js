@@ -26,6 +26,7 @@ const RenderLeader = ({ leader }) => {
   );
 };
 
+// props needs to be passed in for a functional component unlike a class component
 function About(props) {
   const leaders = props.leaders.map((leader) => {
     return <RenderLeader leader={leader} />;
