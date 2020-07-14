@@ -9,6 +9,7 @@ import {
   Label,
   Input,
   Col,
+  FormFeedback,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 
@@ -24,13 +25,22 @@ class Contact extends Component {
       agree: false,
       contactType: "Tel.",
       message: "",
+      // after user starts typing then only we start validating
+      touched: {
+        firstname: false,
+        lastname: false,
+        telnum: false,
+        email: false,
+      },
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleBlur.bind(this);
   }
 
   handleInputChange(event) {
+    // .target is used to capture the value entered in the input field
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
@@ -47,7 +57,54 @@ class Contact extends Component {
     event.preventDefault();
     // prevent default form action to submit
   }
+
+  handleBlur = (field) => () => {
+    this.setState({
+      touched: { ...this.state.touched, [field]: true }, // changing the touched field(=firstname,lastname...) value
+    });
+  };
+
+  validate(firstname, lastname, telnum, email) {
+    const errors = {
+      firstname: "",
+      lastname: "",
+      telnum: "",
+      email: "",
+    };
+
+    if (this.state.touched.firstname && firstname.length < 3)
+      errors.firstname = "First name should be >= 3 characters";
+    else if (this.state.touched.firstname && firstname.length < 10)
+      errors.firstname = "First name should be < 10 characters";
+
+    if (this.state.touched.lastname && lastname.length < 3)
+      errors.lastname = "Last name should be >= 3 characters";
+    else if (this.state.touched.lastname && lastname.length < 10)
+      errors.lastname = "Last name should be < 10 characters";
+
+    const reg = /^\d+$/; // find digits between 0-9
+    if (this.state.touched.telnum && !reg.test(telnum) && telnum.length === 10)
+      //test checks for a match in the string
+      errors.telnum = "Tel. Number should contain only";
+
+    if (
+      this.state.touched.email &&
+      email.split("").filter((x) => x === "@").length !== 1
+    )
+      //check if only one @ character should be present in the email entered
+      errors.email = "Email should contain a @";
+
+    return errors;
+  }
+
   render() {
+    // Error check is done each time contact component is rendered
+    const errors = this.validate(
+      this.state.firstname,
+      this.state.firstname,
+      this.state.telnum,
+      this.state.email
+    );
     return (
       <div className="container">
         <div className="row">
@@ -127,10 +184,14 @@ class Contact extends Component {
                     name="firstname"
                     placeholder="First Name"
                     value={this.state.firstname}
-                    // Since the value attribute is set on our form element, the displayed value will always be this.state.value, making the React state the source of truth.
+                    valid={errors.firstname === ""}
+                    invalid={errors.firstname !== ""}
+                    onBlur={this.handleBlur("firstname")}
+                    // onBlur= when input field loses focus it gets triggered
                     onChange={this.handleInputChange}
-                    // handleChange runs on every keystroke to update the React state, the displayed value will update as the user types
+                    // onChange is an event handler in JS which detects changes in the input field while typing
                   />
+                  <FormFeedback>{errors.firstname}</FormFeedback>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -144,8 +205,12 @@ class Contact extends Component {
                     name="lastname"
                     placeholder="Last Name"
                     value={this.state.lastname}
+                    valid={errors.lastname === ""}
+                    invalid={errors.lastname !== ""}
+                    onBlur={this.handleBlur("lastname")}
                     onChange={this.handleInputChange}
                   />
+                  <FormFeedback>{errors.lastname}</FormFeedback>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -157,10 +222,14 @@ class Contact extends Component {
                     type="tel"
                     id="telnum"
                     name="telnum"
-                    placeholder="Tel. number"
+                    placeholder="Tel. Number"
                     value={this.state.telnum}
+                    valid={errors.telnum === ""}
+                    invalid={errors.telnum !== ""}
+                    onBlur={this.handleBlur("telnum")}
                     onChange={this.handleInputChange}
                   />
+                  <FormFeedback>{errors.telnum}</FormFeedback>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -174,8 +243,12 @@ class Contact extends Component {
                     name="email"
                     placeholder="Email"
                     value={this.state.email}
+                    valid={errors.email === ""}
+                    invalid={errors.email !== ""}
+                    onBlur={this.handleBlur("email")}
                     onChange={this.handleInputChange}
                   />
+                  <FormFeedback>{errors.email}</FormFeedback>
                 </Col>
               </FormGroup>
               <FormGroup row>
