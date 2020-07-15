@@ -45,6 +45,7 @@ class Header extends Component {
 
   handleLogin(event) {
     this.toggleModal();
+    // once submit button is clicked modal will be toggled, thus closed.
     alert(
       "Username: " +
         this.username.value +
@@ -123,9 +124,12 @@ class Header extends Component {
           </div>
         </Jumbotron>
         <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+          {/* check if modal is open or not and toggle its current state */}
           <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
+          {/* toggle over here is connected to a btn to close the modal*/}
           <ModalBody>
             <Form onSubmit={this.handleLogin}>
+              {/* on submitting, the modal will close and an alert will be shown */}
               <FormGroup>
                 <Label htmlFor="username">Username</Label>
                 <Input
@@ -133,7 +137,7 @@ class Header extends Component {
                   id="username"
                   name="username"
                   innerRef={(input) => (this.username = input)}
-                  // Refs provide a way to access DOM nodes or React elements created in the render method
+                  // Refs provide a way to access DOM nodes or React elements created in the render method. It is used to access the values taken as input in this case in simple words.
                 />
               </FormGroup>
               <FormGroup>
@@ -156,6 +160,7 @@ class Header extends Component {
                 </Label>
               </FormGroup>
               <Button type="submit" value="submit" color="primary">
+                {/* submit is the initial value of the button in the form */}
                 Login
               </Button>
             </Form>
