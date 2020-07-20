@@ -150,7 +150,7 @@ class Header extends Component {
                 />
               </FormGroup>
               <FormGroup check>
-                <Label check>
+                <Label check className="mb-3">
                   <Input
                     type="checkbox"
                     name="remember"

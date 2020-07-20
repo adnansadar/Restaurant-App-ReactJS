@@ -1,12 +1,17 @@
-import { createStore } from "redux";
-// used for creating a react store
-import { Reducer, initialState } from "./reducer";
+import { createStore, combineReducers } from "redux";
+import { Dishes } from "./dishes";
+import { Comments } from "./comments";
+import { Promotions } from "./promotions";
+import { Leaders } from "./leaders";
 
-// Creating the react store in a seperate file and exporting it
 export const ConfigureStore = () => {
   const store = createStore(
-    Reducer, // reducer
-    initialState // our initialState
+    combineReducers({
+      dishes: Dishes,
+      comments: Comments,
+      promotions: Promotions,
+      leaders: Leaders,
+    })
   );
 
   return store;

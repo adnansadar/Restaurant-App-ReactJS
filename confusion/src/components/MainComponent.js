@@ -23,6 +23,7 @@ const mapStateToProps = (state) => {
 
 class Main extends Component {
   render() {
+    // A match object contains information about how a <Route path> matched the URL. match objects contain the following properties. Part of react-router.
     const DishWithId = ({ match }) => {
       return (
         <DishDetail
