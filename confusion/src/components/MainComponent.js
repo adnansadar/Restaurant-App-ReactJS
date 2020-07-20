@@ -10,6 +10,7 @@ import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 // connect used to connect component to redux store
 import About from "./AboutComponent";
+import { addComment } from "../redux/ActionCreators";
 
 // takes in the reducer's state and is available as props to the MainComponent
 const mapStateToProps = (state) => {
@@ -21,22 +22,26 @@ const mapStateToProps = (state) => {
   };
 };
 
+const mapDispatchToProps = (dispatch) => ({
+  addComment: (dishId, rating, author, comment) =>
+    dispatch(addComment(dishId, rating, author, comment)),
+});
+
 class Main extends Component {
   render() {
     // A match object contains information about how a <Route path> matched the URL. match objects contain the following properties. Part of react-router.
     const DishWithId = ({ match }) => {
       return (
         <DishDetail
-          //
           dish={
             this.props.dishes.filter(
               (dish) => dish.id === parseInt(match.params.dishId, 10)
             )[0]
-            // Integer to the base 10, params = Route parameters are parts of the URL that will change based on the object we want to display
           }
           comments={this.props.comments.filter(
             (comment) => comment.dishId === parseInt(match.params.dishId, 10)
           )}
+          addComment={this.props.addComment}
         />
       );
     };
@@ -85,5 +90,5 @@ class Main extends Component {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
 // connecting component to the react router
