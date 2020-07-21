@@ -22,9 +22,16 @@ const mapStateToProps = (state) => {
   };
 };
 
+// mapDispatchToProps is used for dispatching actions to the store.
+// dispatch is a function of the Redux store. You call store.dispatch to dispatch an action. This is the only way to trigger a state change.
+
 const mapDispatchToProps = (dispatch) => ({
   addComment: (dishId, rating, author, comment) =>
     dispatch(addComment(dishId, rating, author, comment)),
+  // dispatch is required to carry out the action
+  // obtain the action using addComment
+  // pass it the parameters to be added to the state
+  // it returns the action object which is then passed to dispatch
 });
 
 class Main extends Component {
@@ -50,6 +57,7 @@ class Main extends Component {
       return (
         <Home
           // if dish is featured as true in the dishes data then it will be displayed
+          // this.state has become this.props as we are using a store to store the state
           dish={this.props.dishes.filter((dish) => dish.featured)[0]}
           promotion={this.props.promotions.filter((promo) => promo.featured)[0]}
           leader={this.props.leaders.filter((leader) => leader.featured)[0]}
@@ -92,3 +100,4 @@ class Main extends Component {
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
 // connecting component to the react router
+//  dispatch is required to carry out the action

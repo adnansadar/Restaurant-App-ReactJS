@@ -3,6 +3,7 @@ import * as ActionTypes from "./ActionTypes";
 
 export const Comments = (state = COMMENTS, action) => {
   switch (action.type) {
+    // if action type is Add Comment
     case ActionTypes.ADD_COMMENT:
       var comment = action.payload;
       comment.id = state.length;

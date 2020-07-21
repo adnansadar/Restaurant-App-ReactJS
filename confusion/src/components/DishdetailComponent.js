@@ -36,6 +36,7 @@ export class CommentForm extends Component {
 
   handleSubmit(values) {
     this.toggleModal();
+    // finally these parameters which we have given as inputs after submitting will be passed to addComment function in Action Creater
     this.props.addComment(
       this.props.dishId,
       values.rating,
