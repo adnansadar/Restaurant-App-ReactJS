@@ -10,7 +10,7 @@ import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 // connect used to connect component to redux store
 import About from "./AboutComponent";
-import { addComment } from "../redux/ActionCreators";
+import { addComment, fetchDishes } from "../redux/ActionCreators";
 
 // takes in the reducer's state and is available as props to the MainComponent
 const mapStateToProps = (state) => {
@@ -32,6 +32,9 @@ const mapDispatchToProps = (dispatch) => ({
   // obtain the action using addComment
   // pass it the parameters to be added to the state
   // it returns the action object which is then passed to dispatch
+  fetchDishes: () => {
+    dispatch(fetchDishes());
+  },
 });
 
 class Main extends Component {
