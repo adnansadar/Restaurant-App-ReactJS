@@ -1,8 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
-import { Breadcrumb, BreadcrumbItem, Row, Col, Label } from "reactstrap";
-import { Control, LocalForm, Errors } from "react-redux-form";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  Row,
+  Col,
+  Label,
+  Button,
+} from "reactstrap";
 import { Link } from "react-router-dom";
+import { Control, Form, Errors } from "react-redux-form";
 
 class Contact extends Component {
   constructor(props) {
@@ -14,6 +21,8 @@ class Contact extends Component {
   handleSubmit(values) {
     console.log("Current State is: " + JSON.stringify(values));
     alert("Current State is: " + JSON.stringify(values));
+    this.props.resetFeedbackForm();
+    // event.preventDefault();
   }
 
   render() {
@@ -90,7 +99,10 @@ class Contact extends Component {
           <div className="col-12 col-md-9">
             {/* on md to lg screens columns occupy 9 grid parts else 12 */}
             {/* This is a controlled component in React as we keep updating and storing the value in the state which is the single source of truth and this value can also be accessed by other components */}
-            <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+            <Form
+              model="feedback"
+              onSubmit={(values) => this.handleSubmit(values)}
+            >
               <Row className="form-group">
                 <Label htmlFor="firstname" md={2}>
                   First Name
@@ -113,8 +125,8 @@ class Contact extends Component {
                     model=".firstname"
                     show="touched"
                     messages={{
-                      required: "Required ",
-                      minLength: "Must be greater than 2 characters ",
+                      required: "Required",
+                      minLength: "Must be greater than 2 characters",
                       maxLength: "Must be 15 characters or less",
                     }}
                   />
@@ -142,8 +154,8 @@ class Contact extends Component {
                     model=".lastname"
                     show="touched"
                     messages={{
-                      required: "Required ",
-                      minLength: "Must be greater than 2 characters ",
+                      required: "Required",
+                      minLength: "Must be greater than 2 characters",
                       maxLength: "Must be 15 characters or less",
                     }}
                   />
@@ -172,9 +184,9 @@ class Contact extends Component {
                     model=".telnum"
                     show="touched"
                     messages={{
-                      required: "Required ",
-                      minLength: "Must be greater than 2 numbers ",
-                      maxLength: "Must be 15 numbers or less ",
+                      required: "Required",
+                      minLength: "Must be greater than 2 numbers",
+                      maxLength: "Must be 15 numbers or less",
                       isNumber: "Must be a number",
                     }}
                   />
@@ -201,13 +213,58 @@ class Contact extends Component {
                     model=".email"
                     show="touched"
                     messages={{
-                      required: "Required ",
+                      required: "Required",
                       validEmail: "Invalid Email Address",
                     }}
                   />
                 </Col>
               </Row>
-            </LocalForm>
+              <Row className="form-group">
+                <Col md={{ size: 6, offset: 2 }}>
+                  <div className="form-check">
+                    <Label check>
+                      <Control.checkbox
+                        model=".agree"
+                        name="agree"
+                        className="form-check-input"
+                      />{" "}
+                      <strong>May we contact you?</strong>
+                    </Label>
+                  </div>
+                </Col>
+                <Col md={{ size: 3, offset: 1 }}>
+                  <Control.select
+                    model=".contactType"
+                    name="contactType"
+                    className="form-control"
+                  >
+                    <option>Tel.</option>
+                    <option>Email</option>
+                  </Control.select>
+                </Col>
+              </Row>
+              <Row className="form-group">
+                <Label htmlFor="message" md={2}>
+                  Your Feedback
+                </Label>
+                <Col md={10}>
+                  <Control.textarea
+                    model=".message"
+                    id="message"
+                    name="message"
+                    rows="12"
+                    className="form-control"
+                  />
+                </Col>
+              </Row>
+              <Row className="form-group">
+                <Col md={{ size: 10, offset: 2 }}>
+                  <Button type="submit" color="primary">
+                    Send Feedback
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 // connect used to connect component to redux store
 import About from "./AboutComponent";
 import { addComment, fetchDishes } from "../redux/ActionCreators";
+import { actions } from "react-redux-form";
 
 // takes in the reducer's state and is available as props to the MainComponent
 const mapStateToProps = (state) => {
@@ -32,9 +33,14 @@ const mapDispatchToProps = (dispatch) => ({
   // obtain the action using addComment
   // pass it the parameters to be added to the state
   // it returns the action object which is then passed to dispatch
+
   fetchDishes: () => {
     dispatch(fetchDishes());
   },
+  resetFeedbackForm: () => {
+    dispatch(actions.reset("feedback"));
+  },
+  // the form will be reset after submitting using actions from react redux form
   // fetchDishes is a thunk which is being dispatched.
 });
 
@@ -100,7 +106,14 @@ class Main extends Component {
           />
           <Route path="/menu/:dishId" component={DishWithId} />
           {/* Routes the menu to the exact dish using dishid and loads it seperately */}
-          <Route exact path="/contactus" component={Contact} />
+          <Route
+            exact
+            path="/contactus"
+            component={() => (
+              <Contact resetFeedbackForm={this.props.resetFeedbackForm} />
+            )}
+          />
+          {/* resetFeedbackForm is passed to the Contact component as it posseses a form */}
           {/* Redirect= Default if wrong URL entered */}
           <Redirect to="/home" />
         </Switch>
