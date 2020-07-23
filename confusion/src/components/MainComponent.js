@@ -35,19 +35,26 @@ const mapDispatchToProps = (dispatch) => ({
   fetchDishes: () => {
     dispatch(fetchDishes());
   },
+  // fetchDishes is a thunk which is being dispatched.
 });
 
 class Main extends Component {
+  // dishes will be fetched just after this component is mounted
+  componentDidMount() {
+    this.props.fetchDishes();
+  }
   render() {
     // A match object contains information about how a <Route path> matched the URL. match objects contain the following properties. Part of react-router.
     const DishWithId = ({ match }) => {
       return (
         <DishDetail
           dish={
-            this.props.dishes.filter(
+            this.props.dishes.dishes.filter(
               (dish) => dish.id === parseInt(match.params.dishId, 10)
             )[0]
           }
+          isLoading={this.props.dishes.isLoading}
+          errMess={this.props.dishes.errMess}
           comments={this.props.comments.filter(
             (comment) => comment.dishId === parseInt(match.params.dishId, 10)
           )}
@@ -61,7 +68,9 @@ class Main extends Component {
         <Home
           // if dish is featured as true in the dishes data then it will be displayed
           // this.state has become this.props as we are using a store to store the state
-          dish={this.props.dishes.filter((dish) => dish.featured)[0]}
+          dish={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
+          dishesLoading={this.props.dishes.isLoading}
+          dishesErrMess={this.props.dishes.errMess}
           promotion={this.props.promotions.filter((promo) => promo.featured)[0]}
           leader={this.props.leaders.filter((leader) => leader.featured)[0]}
         />
