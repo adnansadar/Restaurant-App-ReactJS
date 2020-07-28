@@ -1,13 +1,18 @@
 import * as ActionTypes from "./ActionTypes";
 import { DISHES } from "../shared/dishes";
+import baseUrl from "../shared/baseUrl";
 
 // Actions are payloads of information that send data from your application to your store. They are the only source of information for the store
 
 // This is an action object which always contains a type
 export const addComment = (dishId, rating, author, comment) => ({
   type: ActionTypes.ADD_COMMENT,
+  // ADD_COMMENT is a const in ActionTypes
   // Actions are plain JavaScript objects. Actions must have a type property that indicates the type of action being performed. Types should typically be defined as string constants.
   // data that is going to be carried to the reducer function is stored in payload
+  // Actions are payloads of information that send data from your application to your store. They are the only source of information for the store. You send them to the store using store.dispatch().
+
+  // Payload is what is bundled in your actions and passed around between reducers in your redux application.
   payload: {
     dishId: dishId,
     rating: rating,
@@ -16,14 +21,14 @@ export const addComment = (dishId, rating, author, comment) => ({
   },
 });
 
-// fetchDishes is a thunk that dispatches several actions
+// fetchDishes is a thunk that dispatches several actions(function within a function = thunk)
 export const fetchDishes = () => (dispatch) => {
   dispatch(dishesLoading(true));
 
-  // creating a delay of 2000ms
-  setTimeout(() => {
-    dispatch(addDishes(DISHES));
-  }, 2000);
+  // communicating with the server
+  return fetch(baseUrl + "dishes")
+    .then((response) => response.json())
+    .then((dishes) => dispatch(addDishes(dishes)));
 };
 
 export const dishesLoading = () => ({
@@ -39,4 +44,20 @@ export const dishesFailed = (errmess) => ({
 export const addDishes = (dishes) => ({
   type: ActionTypes.ADD_DISHES,
   payload: dishes,
+});
+
+export const fetchComments = () => (dispatch) => {
+  return fetch(baseUrl + "comments")
+    .then((response) => response.json())
+    .then((comments) => dispatch(addComments(comments)));
+};
+
+export const commentsFailed = (errmess) => ({
+  type: ActionTypes.COMMENTS_FAILED,
+  payload: errmess,
+});
+
+export const addComments = (comments) => ({
+  type: ActionTypes.ADD_COMMENTS,
+  payload: comments,
 });
