@@ -5,21 +5,46 @@ import { baseUrl } from "../shared/baseUrl";
 // Actions are payloads of information that send data from your application to your store. They are the only source of information for the store
 
 // This is an action object which always contains a type
-export const addComment = (dishId, rating, author, comment) => ({
+export const addComment = (comment) => ({
   type: ActionTypes.ADD_COMMENT,
-  // ADD_COMMENT is a const in ActionTypes
-  // Actions are plain JavaScript objects. Actions must have a type property that indicates the type of action being performed. Types should typically be defined as string constants.
-  // data that is going to be carried to the reducer function is stored in payload
-  // Actions are payloads of information that send data from your application to your store. They are the only source of information for the store. You send them to the store using store.dispatch().
+    payload: comment
+  }
+);
 
-  // Payload is what is bundled in your actions and passed around between reducers in your redux application.
-  payload: {
-    dishId: dishId,
-    rating: rating,
-    author: author,
-    comment: comment,
-  },
-});
+export const postComment = (dishId, rating, author, comment) => (dispatch) => {
+
+  const newComment = {
+      dishId: dishId,
+      rating: rating,
+      author: author,
+      comment: comment
+  };
+  newComment.date = new Date().toISOString();
+  
+  return fetch(baseUrl + 'comments', {
+      method: "POST",
+      body: JSON.stringify(newComment),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "same-origin"
+  })
+  .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+    error => {
+          throw error;
+    })
+  .then(response => response.json())
+  .then(response => dispatch(addComment(response)))
+  .catch(error =>  { console.log('post comments', error.message); alert('Your comment could not be posted\nError: '+error.message); });
+};
 
 // fetchDishes is a thunk that dispatches several actions(function within a function = thunk)
 export const fetchDishes = () => (dispatch) => {

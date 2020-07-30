@@ -10,13 +10,9 @@ import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 // connect used to connect component to redux store
 import About from "./AboutComponent";
-import {
-  addComment,
-  fetchDishes,
-  fetchComments,
-  fetchPromos,
-} from "../redux/ActionCreators";
+
 import { actions } from "react-redux-form";
+import { postComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
 
 // takes in the reducer's state and is available as props to the MainComponent
 const mapStateToProps = (state) => {
@@ -32,8 +28,8 @@ const mapStateToProps = (state) => {
 // dispatch is a function of the Redux store. You call store.dispatch to dispatch an action. This is the only way to trigger a state change.
 
 const mapDispatchToProps = (dispatch) => ({
-  addComment: (dishId, rating, author, comment) =>
-    dispatch(addComment(dishId, rating, author, comment)),
+  postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment))
+,
   // dispatch is required to carry out the action
   // obtain the action using addComment
   // pass it the parameters to be added to the state
@@ -73,7 +69,7 @@ class Main extends Component {
           comments={this.props.comments.comments.filter(
             (comment) => comment.dishId === parseInt(match.params.dishId, 10)
           )}
-          addComment={this.props.addComment}
+          postComment={this.props.postComment}
         />
       );
     };
