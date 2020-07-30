@@ -4,46 +4,88 @@ import { baseUrl } from "../shared/baseUrl";
 
 // Actions are payloads of information that send data from your application to your store. They are the only source of information for the store
 
+export const postFeedback = (feedback) => (dispatch) => {
+  const newFeedback = Object.assign(
+    { date: new Date().toISOString() },
+    feedback
+  );
+  return fetch(baseUrl + "feedback", {
+    method: "POST",
+    body: JSON.stringify(newFeedback),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "same-origin",
+  })
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          error.response = response;
+          throw error;
+        }
+      },
+      (error) => {
+        throw error;
+      }
+    )
+    .then((response) => response.json())
+    .then((response) => dispatch(feedback(response)))
+    .catch((error) => {
+      console.log("post comments", error.message);
+      alert("Your comment could not be posted\nError: " + error.message);
+    });
+};
+
 // This is an action object which always contains a type
 export const addComment = (comment) => ({
   type: ActionTypes.ADD_COMMENT,
-    payload: comment
-  }
-);
+  payload: comment,
+});
 
 export const postComment = (dishId, rating, author, comment) => (dispatch) => {
-
   const newComment = {
-      dishId: dishId,
-      rating: rating,
-      author: author,
-      comment: comment
+    dishId: dishId,
+    rating: rating,
+    author: author,
+    comment: comment,
   };
   newComment.date = new Date().toISOString();
-  
-  return fetch(baseUrl + 'comments', {
-      method: "POST",
-      body: JSON.stringify(newComment),
-      headers: {
-        "Content-Type": "application/json"
-      },
-      credentials: "same-origin"
+
+  return fetch(baseUrl + "comments", {
+    method: "POST",
+    body: JSON.stringify(newComment),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "same-origin",
   })
-  .then(response => {
-      if (response.ok) {
-        return response;
-      } else {
-        var error = new Error('Error ' + response.status + ': ' + response.statusText);
-        error.response = response;
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          error.response = response;
+          throw error;
+        }
+      },
+      (error) => {
         throw error;
       }
-    },
-    error => {
-          throw error;
-    })
-  .then(response => response.json())
-  .then(response => dispatch(addComment(response)))
-  .catch(error =>  { console.log('post comments', error.message); alert('Your comment could not be posted\nError: '+error.message); });
+    )
+    .then((response) => response.json())
+    .then((response) => dispatch(addComment(response)))
+    .catch((error) => {
+      console.log("post comments", error.message);
+      alert("Your comment could not be posted\nError: " + error.message);
+    });
 };
 
 // fetchDishes is a thunk that dispatches several actions(function within a function = thunk)
@@ -152,6 +194,32 @@ export const fetchPromos = () => (dispatch) => {
     .catch((error) => dispatch(promosFailed(error.message)));
 };
 
+export const fetchLeaders = () => (dispatch) => {
+  dispatch(leadersLoading());
+
+  return fetch(baseUrl + "leaders")
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          error.response = response;
+          throw error;
+        }
+      },
+      (error) => {
+        var errmess = new Error(error.message);
+        throw errmess;
+      }
+    )
+    .then((response) => response.json())
+    .then((leaders) => dispatch(addLeaders(leaders)))
+    .catch((error) => dispatch(leadersFailed(error.message)));
+};
+
 export const promosLoading = () => ({
   type: ActionTypes.PROMOS_LOADING,
 });
@@ -164,4 +232,18 @@ export const promosFailed = (errmess) => ({
 export const addPromos = (promos) => ({
   type: ActionTypes.ADD_PROMOS,
   payload: promos,
+});
+
+export const leadersLoading = () => (dispatch) => ({
+  type: ActionTypes.LEADERS_LOADING,
+});
+
+export const leadersFailed = (errmess) => ({
+  type: ActionTypes.LEADERS_FAILED,
+  payload: errmess,
+});
+
+export const addLeaders = (leaders) => ({
+  type: ActionTypes.ADD_LEADERS,
+  payload: leaders,
 });

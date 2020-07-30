@@ -7,29 +7,35 @@ import {
   CardHeader,
   Media,
 } from "reactstrap";
+import { baseUrl } from "../shared/baseUrl";
 import { Link } from "react-router-dom";
+import { Fade, Stagger } from "react-animation-components";
 
 const RenderLeader = ({ leader }) => {
   return (
-    <div key={leader.id} className="col-12 mt-5">
-      <Media tag="li">
-        <Media>
-          <Media object src={leader.image} alt={leader.name} />
+    <Fade in>
+      <Media className="mt-5">
+        <Media left className="mr-5">
+          <Media object src={baseUrl + leader.image} alt={leader.name} />
         </Media>
-        <Media body className="ml-5">
+        <Media body>
           <Media heading>{leader.name}</Media>
           <p>{leader.designation}</p>
-          <p>{leader.description}</p>
+          {leader.description}
         </Media>
       </Media>
-    </div>
+    </Fade>
   );
 };
 
 // props needs to be passed in for a functional component unlike a class component
 function About(props) {
   const leaders = props.leaders.map((leader) => {
-    return <RenderLeader leader={leader} />;
+    return (
+      <Stagger in>
+        <RenderLeader leader={leader} />
+      </Stagger>
+    );
   });
 
   return (

@@ -12,7 +12,7 @@ export const Comments = (state = COMMENTS, action) => {
     // if action type is Add Comment
     case ActionTypes.ADD_COMMENT:
       var comment = action.payload;
-    
+
       console.log("Comment: ", comment);
       return state.concat(comment);
     // concat will add to the existing comments present and not mutate the previous ones
