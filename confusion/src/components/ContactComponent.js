@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
 import {
   Breadcrumb,
@@ -11,6 +10,12 @@ import {
 import { Link } from "react-router-dom";
 import { Control, Form, Errors } from "react-redux-form";
 
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !val || val.length <= len;
+const minLength = (len) => (val) => val && val.length >= len;
+const isNumber = (val) => !isNaN(Number(val));
+const validEmail = (val) =>
+  /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 class Contact extends Component {
   constructor(props) {
     super(props);
@@ -23,16 +28,10 @@ class Contact extends Component {
     this.props.postFeedback(values);
     alert("Current State is: " + JSON.stringify(values));
     this.props.resetFeedbackForm();
-    // event.preventDefault();
+    this.props.postFeedback(JSON.stringify(values));
   }
 
   render() {
-    const required = (val) => val && val.length;
-    const maxLength = (len) => (val) => !val || val.length <= len;
-    const minLength = (len) => (val) => val && val.length >= len;
-    const isNumber = (val) => !isNaN(Number(val));
-    const validEmail = (val) =>
-      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
     return (
       <div className="container">
         <div className="row">
@@ -80,7 +79,11 @@ class Contact extends Component {
               >
                 <i className="fa fa-phone"></i> Call
               </a>
-              <a role="button" className="btn btn-info">
+              <a
+                role="button"
+                className="btn btn-info"
+                href="https://www.skype.com/en/"
+              >
                 <i className="fa fa-skype"></i> Skype
               </a>
               <a
@@ -105,7 +108,7 @@ class Contact extends Component {
               onSubmit={(values) => this.handleSubmit(values)}
             >
               <Row className="form-group">
-                <Label htmlFor="firstname" md={2}>
+                <Label htmlfor="firstname" md={2}>
                   First Name
                 </Label>
                 <Col md={10}>
@@ -134,7 +137,7 @@ class Contact extends Component {
                 </Col>
               </Row>
               <Row className="form-group">
-                <Label htmlFor="lastname" md={2}>
+                <Label htmlfor="lastname" md={2}>
                   Last Name
                 </Label>
                 <Col md={10}>
@@ -163,7 +166,7 @@ class Contact extends Component {
                 </Col>
               </Row>
               <Row className="form-group">
-                <Label htmlFor="telnum" md={2}>
+                <Label htmlfor="telnum" md={2}>
                   Contact Tel.
                 </Label>
                 <Col md={10}>
@@ -188,13 +191,13 @@ class Contact extends Component {
                       required: "Required",
                       minLength: "Must be greater than 2 numbers",
                       maxLength: "Must be 15 numbers or less",
-                      isNumber: "Must be a number",
+                      isNumber: "Must include digits only!",
                     }}
                   />
                 </Col>
               </Row>
               <Row className="form-group">
-                <Label htmlFor="email" md={2}>
+                <Label htmlfor="email" md={2}>
                   Email
                 </Label>
                 <Col md={10}>
@@ -245,7 +248,7 @@ class Contact extends Component {
                 </Col>
               </Row>
               <Row className="form-group">
-                <Label htmlFor="message" md={2}>
+                <Label htmlfor="message" md={2}>
                   Your Feedback
                 </Label>
                 <Col md={10}>

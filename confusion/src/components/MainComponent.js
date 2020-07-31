@@ -1,23 +1,25 @@
 import React, { Component } from "react";
-// import { Navbar, NavbarBrand } from "reactstrap";
 import Menu from "./MenuComponent";
 import DishDetail from "./DishdetailComponent";
 import Header from "./HeaderComponent";
+import Footer from "./FooterComponent";
 import Contact from "./ContactComponent";
 import Home from "./HomeComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-// connect used to connect component to redux store
-import About from "./AboutComponent";
-
-import { actions } from "react-redux-form";
 import {
   postComment,
   fetchDishes,
   fetchComments,
   fetchPromos,
   fetchLeaders,
+  postFeedback,
 } from "../redux/ActionCreators";
+// connect used to connect component to redux store
+import About from "./AboutComponent";
+
+import { actions } from "react-redux-form";
+
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 // takes in the reducer's state and is available as props to the MainComponent
@@ -36,6 +38,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   postComment: (dishId, rating, author, comment) =>
     dispatch(postComment(dishId, rating, author, comment)),
+
   // dispatch is required to carry out the action
   // obtain the action using addComment
   // pass it the parameters to be added to the state
@@ -52,6 +55,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchComments: () => dispatch(fetchComments()),
   fetchPromos: () => dispatch(fetchPromos()),
   fetchLeaders: () => dispatch(fetchLeaders()),
+  postFeedback: (feedback) => dispatch(postFeedback(feedback)),
 });
 
 class Main extends Component {
@@ -63,25 +67,6 @@ class Main extends Component {
     this.props.fetchLeaders();
   }
   render() {
-    // A match object contains information about how a <Route path> matched the URL. match objects contain the following properties. Part of react-router.
-    const DishWithId = ({ match }) => {
-      return (
-        <DishDetail
-          dish={
-            this.props.dishes.dishes.filter(
-              (dish) => dish.id === parseInt(match.params.dishId, 10)
-            )[0]
-          }
-          isLoading={this.props.dishes.isLoading}
-          errMess={this.props.dishes.errMess}
-          comments={this.props.comments.comments.filter(
-            (comment) => comment.dishId === parseInt(match.params.dishId, 10)
-          )}
-          postComment={this.props.postComment}
-        />
-      );
-    };
-
     const HomePage = () => {
       return (
         <Home
@@ -105,6 +90,25 @@ class Main extends Component {
         />
       );
     };
+    // A match object contains information about how a <Route path> matched the URL. match objects contain the following properties. Part of react-router.
+    const DishWithId = ({ match }) => {
+      return (
+        <DishDetail
+          dish={
+            this.props.dishes.dishes.filter(
+              (dish) => dish.id === parseInt(match.params.dishId, 10)
+            )[0]
+          }
+          isLoading={this.props.dishes.isLoading}
+          errMess={this.props.dishes.errMess}
+          comments={this.props.comments.comments.filter(
+            (comment) => comment.dishId === parseInt(match.params.dishId, 10)
+          )}
+          commentsErrMess={this.props.comments.errMess}
+          postComment={this.props.postComment}
+        />
+      );
+    };
 
     return (
       <div>
@@ -115,12 +119,18 @@ class Main extends Component {
             classNames="page"
             timeout={300}
           >
-            <Switch location={this.props.location}>
+            <Switch>
               <Route path="/home" component={HomePage} />
               <Route
                 exact
                 path="/aboutus"
-                component={() => <About leaders={this.props.leaders} />}
+                component={() => (
+                  <About
+                    leaders={this.props.leaders.leaders}
+                    leaderLoading={this.props.leaders.isLoading}
+                    leaderErrMess={this.props.leaders.errMess}
+                  />
+                )}
               />
               <Route
                 exact
@@ -142,6 +152,7 @@ class Main extends Component {
             </Switch>
           </CSSTransition>
         </TransitionGroup>
+        <Footer />
       </div>
     );
   }
