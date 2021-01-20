@@ -1,6 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-#### The above code is deployed at [this link](https://mybooklistmanager.netlify.app/)
+#### The above code is deployed at [this link](https://restaurantfusionmenu.netlify.app/)
 
 ## Screenshots
 ![](screenshot1.png)
